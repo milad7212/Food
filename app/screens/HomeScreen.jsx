@@ -1,11 +1,46 @@
-import React from "react";
-import { StyleSheet, View, Text, Image, TextInput } from "react-native";
+import { React, useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Screen from "../components/Screen";
 import colors from "../config/colors";
+import categories from "../config/categories";
 
 function HomeScreen(props) {
+  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
+
+  const ListCategories = () => {
+    return (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.contentContainerStyle}
+      >
+        {categories.map((category, index) => (
+          <TouchableOpacity key={index} activeOpacity={0.8}>
+            <View
+              style={{
+                backgroundColor:
+                  selectedCategoryIndex === index
+                    ? colors.primary
+                    : colors.light,
+                ...styles.categoryBtn,
+              }}
+            ></View>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    );
+  };
+
   return (
     <Screen>
       <View style={styles.header}>
@@ -22,10 +57,11 @@ function HomeScreen(props) {
         </View>
         <Image style={styles.image} source={require("../assets/person.png")} />
       </View>
+
       <View
         style={{
           marginTop: 40,
-          flexDirection: 1,
+          flexDirection: "row",
           paddingHorizontal: 20,
         }}
       >
@@ -36,22 +72,50 @@ function HomeScreen(props) {
             placeholder="Search for food"
           />
         </View>
+        <View style={styles.sortBtn}>
+          <MaterialCommunityIcons name="sort" size={30} color={colors.white} />
+        </View>
       </View>
+      <ListCategories/>
     </Screen>
   );
 }
 const styles = StyleSheet.create({
+  categoryBtn: {
+    height: 45,
+    width: 120,
+    marginRight: 7,
+    borderRadius: 30,
+    alignItems: "center",
+    paddingHorizontal: 5,
+    flexDirection: "row",
+  },
+  contentContainerStyle: {
+    paddingVertical: 30,
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  sortBtn: {
+    backgroundColor: colors.primary,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 50,
+    height: 50,
+    marginLeft: 10,
+  },
   image: {
     height: 50,
     width: 50,
     borderRadius: 25,
   },
   inputContainer: {
-    flex: 1,
-    height: 50,
-    borderRadius: 10,
-    flexDirection: "row",
     backgroundColor: colors.light,
+    borderRadius: 10,
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    height: 50,
     paddingHorizontal: 20,
   },
   header: {
